@@ -6,7 +6,7 @@ config();
 
 import { createServer } from "http";
 import PrismaClient from "./prisma/PrismaClient";
-import { $Enums } from "@prisma/client";
+import { CarType } from "@prisma/client";
 
 const App = express();
 const HttpServer = createServer(App);
@@ -28,7 +28,7 @@ App.get("/cars", async (req, res) => {
 
     const carTypeArray =
       typeof Type === "string" && Type.length > 0
-        ? (Type.split(",") as $Enums.CarType[])
+        ? (Type.split(",") as CarType[])
         : ([
             "SUV",
             "SPORT",
@@ -36,7 +36,7 @@ App.get("/cars", async (req, res) => {
             "HATCHBACK",
             "MPV",
             "SEDAN",
-          ] as $Enums.CarType[]);
+          ] as CarType[]);
 
     const seats =
       typeof Capacity === "string" && Capacity.length > 0
