@@ -78,6 +78,30 @@ App.get("/cars", async (req, res) => {
   }
 });
 
+
+App.get("/popular", async (req, res) => {
+  try {
+    const results = await PrismaClient.car.findMany({
+        take:7
+    })
+    return res.send({ results });
+  } catch (error) {
+    return res.send({ error });
+  }
+});
+
+
+App.get("/recommended", async (req, res) => {
+  try {
+    const results = await PrismaClient.car.findMany({
+        take:7
+    })
+    return res.send({ results });
+  } catch (error) {
+    return res.send({ error });
+  }
+});
+
 App.get("/search", async (req, res) => {
   const searchTerm = req.query.term as string;
   console.log(searchTerm);
