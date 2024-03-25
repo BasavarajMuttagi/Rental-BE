@@ -82,7 +82,21 @@ App.get("/cars", async (req, res) => {
 App.get("/popular", async (req, res) => {
   try {
     const results = await PrismaClient.car.findMany({
-        take:7
+        take:7,
+        include: {
+          price: {
+            select: {
+              offerPrice: true,
+              rentalPrice: true,
+            },
+          },
+          availability: {
+            select: {
+              carStatus: true,
+              currentLocation: true,
+            },
+          },
+        },
     })
     return res.send({ results });
   } catch (error) {
@@ -94,7 +108,21 @@ App.get("/popular", async (req, res) => {
 App.get("/recommended", async (req, res) => {
   try {
     const results = await PrismaClient.car.findMany({
-        take:7
+        take:7,
+        include: {
+          price: {
+            select: {
+              offerPrice: true,
+              rentalPrice: true,
+            },
+          },
+          availability: {
+            select: {
+              carStatus: true,
+              currentLocation: true,
+            },
+          },
+        },
     })
     return res.send({ results });
   } catch (error) {
