@@ -6,7 +6,8 @@ config();
 
 import { createServer } from "http";
 import PrismaClient from "./prisma/PrismaClient";
-import { $Enums } from "./prisma/generated/client";
+import { $Enums } from "@prisma/client";
+
 const App = express();
 const HttpServer = createServer(App);
 

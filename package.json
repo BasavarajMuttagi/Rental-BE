@@ -21,14 +21,14 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.1",
-    "nodemon": "^3.1.0",
     "prisma": "^5.11.0",
-    "random-number": "^0.0.9",
     "ts-node": "^10.9.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
-    "@types/random-number": "^0.0.4"
+    "@types/random-number": "^0.0.4",
+    "nodemon": "^3.1.0",
+    "random-number": "^0.0.9"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
