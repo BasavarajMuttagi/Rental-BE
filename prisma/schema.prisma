@@ -1,0 +1,135 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Car {
+  id           String        @id @default(cuid())
+  name         String        @db.VarChar(100)
+  year         Int
+  model        String        @db.VarChar(100)
+  manufacturer String        @db.VarChar(100)
+  gearType     Gear          @default(MT)
+  fuelType     Fuel          @default(PETROL)
+  fuelcapacity Int
+  seats        Int
+  carType      CarType       @default(SPORT)
+  description  String        @db.VarChar(500)
+  availability Availability?
+  price        Price?
+  city         String?
+  state        String?
+  country      String?
+  imageUrl     String        @db.VarChar(300)
+  baseUrl      String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  Booking      Booking[]
+  favorite     Favorite[]
+}
+
+model Price {
+  id               String   @id @default(cuid())
+  rentalPrice      Float
+  offerPrice       Float
+  perKilometerCost Float
+  car              Car      @relation(fields: [carId], references: [id])
+  carId            String   @unique
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Availability {
+  id              String             @id @default(cuid())
+  carStatus       AvailabilityStatus @default(AVAILABLE)
+  currentLocation String
+  car             Car                @relation(fields: [carId], references: [id])
+  carId           String             @unique
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+}
+
+model Booking {
+  id        String   @id @default(uuid())
+  pickUp    String
+  dropOff   String
+  startDate DateTime
+  endDate   DateTime
+  totalCost Float
+  isPaid    Boolean  @default(false)
+  car       Car      @relation(fields: [carId], references: [id])
+  carId     String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id        String     @id @default(uuid())
+  username  String     @unique
+  email     String     @unique
+  password  String
+  city      String
+  state     String
+  country   String
+  address   String     @db.VarChar(255)
+  bookings  Booking[]
+  role      Role       @default(USER)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  favorite  Favorite[]
+}
+
+model Favorite {
+  id     String @id @default(cuid())
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+  car    Car    @relation(fields: [carId], references: [id])
+  carId  String
+
+  @@unique([userId, carId])
+}
+
+enum Role {
+  ADMIN
+  DEV
+  USER
+}
+
+enum AvailabilityStatus {
+  AVAILABLE
+  RENTED
+  UNDER_MAINTENANCE
+  UNLISTED
+}
+
+enum Gear {
+  MT
+  AT
+}
+
+enum Fuel {
+  PETROL
+  DIESEL
+}
+
+enum CarType {
+  SPORT
+  SUV
+  MPV
+  SEDAN
+  COUPE
+  HATCHBACK
+}

@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Car" ALTER COLUMN "description" SET DATA TYPE VARCHAR(500);
