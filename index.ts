@@ -29,14 +29,7 @@ App.get("/cars", async (req, res) => {
     const carTypeArray =
       typeof Type === "string" && Type.length > 0
         ? (Type.split(",") as CarType[])
-        : ([
-            "SUV",
-            "SPORT",
-            "COUPE",
-            "HATCHBACK",
-            "MPV",
-            "SEDAN",
-          ] as CarType[]);
+        : (["SUV", "SPORT", "COUPE", "HATCHBACK", "MPV", "SEDAN"] as CarType[]);
 
     const seats =
       typeof Capacity === "string" && Capacity.length > 0
@@ -78,52 +71,50 @@ App.get("/cars", async (req, res) => {
   }
 });
 
-
 App.get("/popular", async (req, res) => {
   try {
     const results = await PrismaClient.car.findMany({
-        take:7,
-        include: {
-          price: {
-            select: {
-              offerPrice: true,
-              rentalPrice: true,
-            },
-          },
-          availability: {
-            select: {
-              carStatus: true,
-              currentLocation: true,
-            },
+      take: 7,
+      include: {
+        price: {
+          select: {
+            offerPrice: true,
+            rentalPrice: true,
           },
         },
-    })
+        availability: {
+          select: {
+            carStatus: true,
+            currentLocation: true,
+          },
+        },
+      },
+    });
     return res.send({ results });
   } catch (error) {
     return res.send({ error });
   }
 });
 
-
 App.get("/recommended", async (req, res) => {
   try {
     const results = await PrismaClient.car.findMany({
-        take:7,
-        include: {
-          price: {
-            select: {
-              offerPrice: true,
-              rentalPrice: true,
-            },
-          },
-          availability: {
-            select: {
-              carStatus: true,
-              currentLocation: true,
-            },
+      take: 7,
+      include: {
+        price: {
+          select: {
+            offerPrice: true,
+            rentalPrice: true,
           },
         },
-    })
+        availability: {
+          select: {
+            carStatus: true,
+            currentLocation: true,
+          },
+        },
+      },
+    });
     return res.send({ results });
   } catch (error) {
     return res.send({ error });
@@ -170,6 +161,41 @@ App.post("/price", async (req, res) => {
   });
 
   return res.send({ result });
+});
+
+App.get("/detail/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(404).send({ message: "Page Not Found!" });
+    }
+    const result = await PrismaClient.car.findUnique({
+      where: {
+        id: id,
+      },
+      include: {
+        price: {
+          select: {
+            offerPrice: true,
+            rentalPrice: true,
+          },
+        },
+        availability: {
+          select: {
+            carStatus: true,
+            currentLocation: true,
+          },
+        },
+      },
+    });
+
+    if (!result) {
+      return res.status(404).send({ message: "Page Not Found!" });
+    }
+    return res.send({ result });
+  } catch (error) {
+    return res.send({ error });
+  }
 });
 
 HttpServer.listen(PORT, () => {
