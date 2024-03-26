@@ -7,6 +7,7 @@ config();
 import { createServer } from "http";
 import { AuthRouter } from "./src/routes/auth.route";
 import { CarRouter } from "./src/routes/car.route";
+import { FavoriteRouter } from "./src/routes/favorite.route";
 const App = express();
 const HttpServer = createServer(App);
 
@@ -17,6 +18,7 @@ App.use(cors());
 App.use(bodyParser.json());
 App.use("/auth", AuthRouter);
 App.use("/api/v1", CarRouter);
+App.use("/favorite", FavoriteRouter);
 App.get("/", (req, res) => {
   return res.send("Hello World");
 });

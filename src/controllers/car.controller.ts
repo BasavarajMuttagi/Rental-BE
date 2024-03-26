@@ -1,10 +1,12 @@
 import { CarType } from "@prisma/client";
 import PrismaClient from "../../prisma/PrismaClient";
 import { Request, Response } from "express";
+import { tokenType } from "../middlewares/auth.middleware";
 
 const getCars = async (req: Request, res: Response) => {
   try {
     const { Price, Type, Capacity } = req.query;
+    const user = req.body.user as tokenType;
     const price = typeof Price === "string" ? parseInt(Price) : 60;
 
     const carTypeArray =
@@ -42,6 +44,14 @@ const getCars = async (req: Request, res: Response) => {
           select: {
             carStatus: true,
             currentLocation: true,
+          },
+        },
+
+        favorite: {
+          where: {
+            userId: {
+              equals: user.userId,
+            },
           },
         },
       },

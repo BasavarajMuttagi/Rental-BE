@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 import { Request, Response, NextFunction } from "express";
 import { DB_SECRET } from "../..";
 
-type tokenType = {
+export type tokenType = {
   userId: string;
   email: string;
   name: string;
@@ -24,7 +24,7 @@ const validateToken = (req: Request, res: Response, next: NextFunction) => {
     }
 
     req.body.user = decoded;
-
+    console.log(req.body.user);
     next();
   });
 };
