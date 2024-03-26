@@ -79,6 +79,13 @@ const getPopularCars = async (req: Request, res: Response) => {
             currentLocation: true,
           },
         },
+        favorite: {
+          select: {
+            carId: true,
+            userId: true,
+            id: true,
+          },
+        },
       },
     });
     return res.send({ results });
@@ -102,6 +109,13 @@ const getRecommendedCars = async (req: Request, res: Response) => {
           select: {
             carStatus: true,
             currentLocation: true,
+          },
+        },
+        favorite: {
+          select: {
+            carId: true,
+            userId: true,
+            id: true,
           },
         },
       },
