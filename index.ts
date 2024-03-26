@@ -7,7 +7,7 @@ config();
 import { createServer } from "http";
 import PrismaClient from "./prisma/PrismaClient";
 import { CarType } from "@prisma/client";
-
+import { AuthRouter } from "./src/routes/auth.route";
 const App = express();
 const HttpServer = createServer(App);
 
@@ -16,6 +16,7 @@ export const DB_SECRET = process.env.DB_SECRET as string;
 
 App.use(cors());
 App.use(bodyParser.json());
+App.use("/auth", AuthRouter);
 
 App.get("/", (req, res) => {
   return res.send("Hello World");
