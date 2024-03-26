@@ -9,7 +9,7 @@ import {
   getRecommendedCars,
   searchCars,
 } from "../controllers/car.controller";
-import { PrismaClient } from "@prisma/client";
+
 
 const CarRouter = express.Router();
 
