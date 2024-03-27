@@ -104,7 +104,9 @@ const updateProfileUrl = async (req: Request, res: Response) => {
       },
     });
 
-    return res.sendStatus(200);
+    return res.send(200).send({
+      url: `https://d38vo1rzl5mxfz.cloudfront.net/${filePath}`
+    });
   } catch (error) {
     res.status(500).send({ message: "Error Occured , Please Try Again!" });
   }
