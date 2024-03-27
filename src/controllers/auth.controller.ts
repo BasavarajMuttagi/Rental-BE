@@ -3,6 +3,7 @@ import * as bcrypt from "bcrypt";
 import { sign } from "jsonwebtoken";
 import PrismaClient from "../../prisma/PrismaClient";
 import { DB_SECRET } from "../..";
+import { tokenType } from "../middlewares/auth.middleware";
 
 const SignUpUser = async (req: Request, res: Response) => {
   try {
@@ -77,10 +78,35 @@ const LoginUser = async (req: Request, res: Response) => {
       DB_SECRET,
       { expiresIn: "24h" }
     );
-    res.status(200).send({ email, token: token, message: "success" });
+    res.status(200).send({
+      user: {
+        name: User.fullname,
+        profileUrl: User.profileUrl,
+      },
+      token: token,
+      message: "success",
+    });
   } catch (error) {
     res.status(500).send({ message: "Error Occured , Please Try Again!" });
   }
 };
 
-export { SignUpUser, LoginUser };
+const updateProfileUrl = async (req: Request, res: Response) => {
+  try {
+    const user = req.body.user as tokenType;
+    const { filePath } = req.body;
+    await PrismaClient.user.update({
+      data: {
+        profileUrl: `https://d38vo1rzl5mxfz.cloudfront.net/${filePath}`,
+      },
+      where: {
+        id: user.userId,
+      },
+    });
+
+    return res.sendStatus(200);
+  } catch (error) {
+    res.status(500).send({ message: "Error Occured , Please Try Again!" });
+  }
+};
+export { SignUpUser, LoginUser, updateProfileUrl };

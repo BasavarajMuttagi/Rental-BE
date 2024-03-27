@@ -53,6 +53,7 @@ App.post("/upload", validateToken, async (req, res) => {
 
   return res.json({
     url,
+    filePath: `/users/${user.userId}.${fileName.split(".")[1]}`,
   });
 });
 

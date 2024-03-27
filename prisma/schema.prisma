@@ -76,20 +76,21 @@ model Booking {
 }
 
 model User {
-  id        String     @id @default(uuid())
-  fullname  String
-  username  String     @unique
-  email     String     @unique
-  password  String
-  city      String
-  state     String
-  country   String
-  address   String     @db.VarChar(255)
-  bookings  Booking[]
-  role      Role       @default(USER)
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  favorite  Favorite[]
+  id         String     @id @default(uuid())
+  profileUrl String     @default("https://d38vo1rzl5mxfz.cloudfront.net/users/avatar.jpg")
+  fullname   String
+  username   String     @unique
+  email      String     @unique
+  password   String
+  city       String
+  state      String
+  country    String
+  address    String     @db.VarChar(255)
+  bookings   Booking[]
+  role       Role       @default(USER)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  favorite   Favorite[]
 }
 
 model Favorite {
