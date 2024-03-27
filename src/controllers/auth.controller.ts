@@ -104,7 +104,7 @@ const updateProfileUrl = async (req: Request, res: Response) => {
       },
     });
 
-    return res.send(200).send({
+    return res.status(200).send({
       url: `https://d38vo1rzl5mxfz.cloudfront.net/${filePath}`
     });
   } catch (error) {
