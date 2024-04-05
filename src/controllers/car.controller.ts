@@ -5,7 +5,125 @@ import { tokenType } from "../middlewares/auth.middleware";
 
 const getCars = async (req: Request, res: Response) => {
   try {
-    const { Price, Type, Capacity } = req.query;
+    const {
+      Price,
+      Type,
+      Capacity,
+      PickUp,
+      PickUpDateAndTime,
+      DropOff,
+      DropOffDateAndTime,
+    } = req.query;
+    if (PickUp && PickUpDateAndTime && DropOff && DropOffDateAndTime) {
+      console.log(
+        Price,
+        Type,
+        Capacity,
+        PickUp,
+        new Date(PickUpDateAndTime.toString()),
+        DropOff,
+        DropOffDateAndTime
+      );
+      const user = req.body.user as tokenType;
+      const price = typeof Price === "string" ? parseInt(Price) : 60;
+
+      const carTypeArray =
+        typeof Type === "string" && Type.length > 0
+          ? (Type.split(",") as CarType[])
+          : ([
+              "SUV",
+              "SPORT",
+              "COUPE",
+              "HATCHBACK",
+              "MPV",
+              "SEDAN",
+            ] as CarType[]);
+
+      const seats =
+        typeof Capacity === "string" && Capacity.length > 0
+          ? Capacity.split(",").map((e) => parseInt(e))
+          : [2, 4, 6, 8];
+
+      const results = await PrismaClient.car.findMany({
+        where: {
+          price: {
+            offerPrice: {
+              gte: price,
+            },
+          },
+          seats: {
+            in: seats,
+          },
+          carType: {
+            in: carTypeArray,
+          },
+          Booking: {
+            none: {
+              OR: [
+                {
+                  AND: [
+                    {
+                      startDate: {
+                        lte: new Date(PickUpDateAndTime.toString()),
+                      },
+                      endDate: {
+                        gte: new Date(PickUpDateAndTime.toString()),
+                      },
+                    },
+                    {
+                      startDate: {
+                        lte: new Date(DropOffDateAndTime.toString()),
+                      },
+                      endDate: {
+                        gte: new Date(DropOffDateAndTime.toString()),
+                      },
+                    },
+                  ],
+                },
+                {
+                  OR: [
+                    {
+                      startDate: {
+                        gte: new Date(PickUpDateAndTime.toString()),
+                        lte: new Date(DropOffDateAndTime.toString()),
+                      },
+                    },
+                    {
+                      endDate: {
+                        gte: new Date(PickUpDateAndTime.toString()),
+                        lte: new Date(DropOffDateAndTime.toString()),
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          },
+        },
+        include: {
+          price: {
+            select: {
+              offerPrice: true,
+              rentalPrice: true,
+            },
+          },
+          availability: {
+            select: {
+              carStatus: true,
+              currentLocation: true,
+            },
+          },
+          favorite: {
+            where: {
+              userId: {
+                equals: user.userId,
+              },
+            },
+          },
+        },
+      });
+      return res.send({ results });
+    }
     const user = req.body.user as tokenType;
     const price = typeof Price === "string" ? parseInt(Price) : 60;
 
