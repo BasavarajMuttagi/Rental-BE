@@ -60,37 +60,50 @@ model Availability {
 }
 
 model Booking {
-  id        String   @id @default(uuid())
-  pickUp    String
-  dropOff   String
-  startDate DateTime
-  endDate   DateTime
-  totalCost Float
-  isPaid    Boolean  @default(false)
-  car       Car      @relation(fields: [carId], references: [id])
-  carId     String
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String        @id @default(uuid())
+  pickUp         String
+  dropOff        String
+  startDate      DateTime
+  endDate        DateTime
+  totalCost      Float
+  isPaid         Boolean       @default(false)
+  payment_status PaymentStatus @default(PENDING)
+  booking_status BookingStatus @default(PENDING)
+  rating         Float         @default(0)
+  review         String        @default("")
+  additionalFees Float         @default(0)
+  discounts      Float         @default(0)
+  car            Car           @relation(fields: [carId], references: [id])
+  carId          String
+  user           User          @relation(fields: [userId], references: [id])
+  userId         String
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
 }
 
 model User {
-  id         String     @id @default(uuid())
-  profileUrl String     @default("https://d38vo1rzl5mxfz.cloudfront.net/users/avatar.jpg")
-  fullname   String
-  username   String     @unique
-  email      String     @unique
-  password   String
-  city       String
-  state      String
-  country    String
-  address    String     @db.VarChar(255)
-  bookings   Booking[]
-  role       Role       @default(USER)
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-  favorite   Favorite[]
+  id               String     @id @default(uuid())
+  profileUrl       String     @default("https://d38vo1rzl5mxfz.cloudfront.net/users/avatar.jpg")
+  fullname         String
+  username         String     @unique
+  email            String     @unique
+  password         String
+  city             String
+  state            String
+  country          String
+  phone            String
+  address          String     @db.VarChar(255)
+  pincode          String
+  bookings         Booking[]
+  role             Role       @default(USER)
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+  favorite         Favorite[]
+  licenseNumber    String
+  expiryDate       DateTime
+  issuingState     String
+  newsletters      Boolean
+  smsNotifications Boolean
 }
 
 model Favorite {
@@ -133,4 +146,18 @@ enum CarType {
   SEDAN
   COUPE
   HATCHBACK
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  CANCELED
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELED
+  COMPLETED
 }
