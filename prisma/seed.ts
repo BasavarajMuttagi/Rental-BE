@@ -858,17 +858,15 @@ async function main() {
     const perkm = parseFloat((rentalPrice / 300).toFixed(2));
 
     const CITIES = [
-      "BIJAPUR",
-      "HUBLI",
-      "BELGAVI",
-      "KALBURGI",
-      "HOSPET",
-      "DHARWAD",
-      "SHIMOGA",
+      "Keerti Nagar",
+      "Adarsh Nagar",
+      "Ram Nagar",
+      "Ganesh Nagar",
+      "Sai Park",
     ];
     const selectCity = rn({
       min: 0,
-      max: 6,
+      max: 4,
       integer: true,
     });
 
