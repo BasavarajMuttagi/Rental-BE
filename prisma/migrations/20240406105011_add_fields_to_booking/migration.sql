@@ -1,0 +1,13 @@
+-- CreateEnum
+CREATE TYPE "PaymentStatus" AS ENUM ('PENDING', 'COMPLETED', 'FAILED', 'CANCELED');
+
+-- CreateEnum
+CREATE TYPE "BookingStatus" AS ENUM ('PENDING', 'CONFIRMED', 'CANCELED', 'COMPLETED');
+
+-- AlterTable
+ALTER TABLE "Booking" ADD COLUMN     "additionalFees" DOUBLE PRECISION NOT NULL DEFAULT 0,
+ADD COLUMN     "booking_status" "BookingStatus" NOT NULL DEFAULT 'PENDING',
+ADD COLUMN     "discounts" DOUBLE PRECISION NOT NULL DEFAULT 0,
+ADD COLUMN     "payment_status" "PaymentStatus" NOT NULL DEFAULT 'PENDING',
+ADD COLUMN     "rating" DOUBLE PRECISION NOT NULL DEFAULT 0,
+ADD COLUMN     "review" TEXT NOT NULL DEFAULT '';
