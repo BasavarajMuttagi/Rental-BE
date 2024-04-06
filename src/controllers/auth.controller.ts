@@ -10,13 +10,16 @@ const SignUpUser = async (req: Request, res: Response) => {
     console.log("*********", req);
     const {
       fullname,
-      username,
       email,
+      password,
+      phone,
+      address,
       city,
       state,
       country,
-      address,
-      password,
+      pincode,
+      driversLicense: { licenseNumber, expiryDate, issuingState },
+      communicationPreferences: { newsletters, smsNotifications },
     } = req.body;
     const isUserExists = await PrismaClient.user.findUnique({
       where: {
@@ -31,13 +34,19 @@ const SignUpUser = async (req: Request, res: Response) => {
     const record = await PrismaClient.user.create({
       data: {
         fullname,
-        username,
         email,
+        password: encryprtedPassword,
+        phone,
+        address,
         city,
         state,
         country,
-        address,
-        password: encryprtedPassword,
+        pincode,
+        licenseNumber,
+        expiryDate,
+        issuingState,
+        newsletters,
+        smsNotifications,
       },
     });
 
@@ -105,7 +114,7 @@ const updateProfileUrl = async (req: Request, res: Response) => {
     });
 
     return res.status(200).send({
-      url: `https://d38vo1rzl5mxfz.cloudfront.net/${filePath}`
+      url: `https://d38vo1rzl5mxfz.cloudfront.net/${filePath}`,
     });
   } catch (error) {
     res.status(500).send({ message: "Error Occured , Please Try Again!" });

@@ -85,7 +85,6 @@ model User {
   id               String     @id @default(uuid())
   profileUrl       String     @default("https://d38vo1rzl5mxfz.cloudfront.net/users/avatar.jpg")
   fullname         String
-  username         String     @unique
   email            String     @unique
   password         String
   city             String
