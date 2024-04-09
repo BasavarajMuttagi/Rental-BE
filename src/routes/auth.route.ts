@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  getBillingInfo,
   LoginUser,
   SignUpUser,
   updateProfileUrl,
@@ -13,5 +14,6 @@ const AuthRouter = express.Router();
 AuthRouter.post("/signup", validate(userSignUpSchema), SignUpUser);
 AuthRouter.post("/login", validate(userLoginSchema), LoginUser);
 AuthRouter.post("/update", validateToken, updateProfileUrl);
+AuthRouter.get("/billinginfo", validateToken, getBillingInfo);
 
 export { AuthRouter };

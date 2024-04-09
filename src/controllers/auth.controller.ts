@@ -120,4 +120,25 @@ const updateProfileUrl = async (req: Request, res: Response) => {
     res.status(500).send({ message: "Error Occured , Please Try Again!" });
   }
 };
-export { SignUpUser, LoginUser, updateProfileUrl };
+
+const getBillingInfo = async (req: Request, res: Response) => {
+  try {
+    const user = req.body.user as tokenType;
+    const result = await PrismaClient.user.findUnique({
+      where: {
+        id: user.userId,
+      },
+      select: {
+        fullname: true,
+        address: true,
+        city: true,
+        phone: true,
+      },
+    });
+
+    res.status(200).send({ result });
+  } catch (error) {
+    res.status(500).send({ message: "Error Occured , Please Try Again!" });
+  }
+};
+export { SignUpUser, LoginUser, updateProfileUrl, getBillingInfo };

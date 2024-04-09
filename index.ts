@@ -11,6 +11,7 @@ import { FavoriteRouter } from "./src/routes/favorite.route";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { tokenType, validateToken } from "./src/middlewares/auth.middleware";
+import { BookingRouter } from "./src/routes/booking.route";
 const App = express();
 const HttpServer = createServer(App);
 
@@ -22,6 +23,8 @@ App.use(bodyParser.json());
 App.use("/auth", AuthRouter);
 App.use("/api/v1", CarRouter);
 App.use("/favorite", FavoriteRouter);
+App.use("/booking", BookingRouter);
+
 App.get("/", (req, res) => {
   return res.send("Hello World");
 });
