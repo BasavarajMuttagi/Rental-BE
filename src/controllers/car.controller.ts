@@ -51,6 +51,11 @@ const getCars = async (req: Request, res: Response) => {
               gte: price,
             },
           },
+          availability: {
+            currentLocation: {
+              equals: PickUp.toString(),
+            },
+          },
           seats: {
             in: seats,
           },
